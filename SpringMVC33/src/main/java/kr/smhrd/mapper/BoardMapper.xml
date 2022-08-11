@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.smhrd.mapper.BoardMapper">
+    
+    <!-- 게시물 정보 불러오기 -->
+     <select id="boardList" resultType ="kr.smhrd.model.BoardVO">
+	select * from board2
+
+    </select>
+    <!-- 게시물 추가  -->
+    <insert id ="BoardInsert" parameterType="kr.smhrd.model.BoardVO">
+        insert into board2(title, writer, contents,id) values(#{title},#{writer},#{contents},#{id})
+        
+        
+        </insert>
+    
+    <!-- 게시물 작성 -->
+     <select id ="boardContent" resultType="kr.smhrd.model.BoardVO">
+        
+        select * from board2
+         where idx = #{idx}
+    </select>
+    
+     <!-- 회원가입 -->
+    <insert id="join" parameterType="kr.smhrd.model.MemberVO">
+      insert into board3(id,pw,name,mail,addr1,addr2,addr3) values(#{id},#{pw},#{name},#{mail},#{addr1},#{addr2},#{addr3})
+	   </insert>
+	   
+     <!-- 게시물 업데이트 -->
+    <update id="boardUpdate" parameterType="kr.smhrd.model.BoardVO">
+        Update board2
+        set contents=#{contents}
+        where idx=#{idx}
+       
+    </update>
+  
+    <!-- 내 게시물 조회 -->
+    <select id="getPage" resultType="kr.smhrd.model.BoardVO">
+       select * from board2  where writer = #{writer}
+    </select>
+    
+      <!-- 게시물(페이징) -->
+ <select id="getListPaging" parameterType="kr.smhrd.model.Criteria" resultType="kr.smhrd.model.BoardVO">
+    
+      Select * from(
+      select idx, title , writer , indate ,id	
+	from board2 order by idx desc) as tl
+	limit #{skip},#{amount}
+    
+    </select>
+    <!-- 페이지 갯수 -->
+    <select id="getTotal" resultType="int">
+        select count(*) from board2
+        
+    </select>
+    
+   <!-- 아이디 체크 -->
+ <select id="idCheck" resultType="int">
+	select count(*) from board3 where id=#{id}     
+ </select>
+ 
+ <!--  비밀번호 체크 -->
+ <select id="pwCheck" resultType="int">
+	select count(*) from board3 where pw=#{pw}     
+ </select>
+   
+  
+</mapper>
+
